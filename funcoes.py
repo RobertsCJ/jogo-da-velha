@@ -1,36 +1,35 @@
 from time import sleep
 from random import randint
+X = '\033[1;31m'; O = '\033[1;36m'; tag = '\033[m'; destaque = '\033[1;7m'
 
 
 def design(): #tabela do jogo da velha
-	print(' ' * 25, '# 7 8 9 #')
+	print()
+	print(' ' * 25, '#       #')
 	print(' ' * 25, ' ', tabela[0][0] + '|' + tabela[0][1] + '|' + tabela[0][2]) 
-	print(' ' * 25, '4', tabela[1][0] + '|' + tabela[1][1] + '|' + tabela[1][2], '6') 
+	print(' ' * 25, ' ', tabela[1][0] + '|' + tabela[1][1] + '|' + tabela[1][2], ' ') 
 	print(' ' * 25, ' ', tabela[2][0] + '|' + tabela[2][1] + '|' + tabela[2][2])
-	print(' ' * 25, '# 1 2 3 #\n')
+	print(' ' * 25, '#       #\n')
 
 
 def menu():
 	global tabela
 	while True:	
-		tabela = [
-				[' ', ' ', ' '],
-				[' ', ' ', ' '],
-				[' ', ' ', ' ']]
+		tabela=[[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
 				
-		print('XO' * 10 + ' JOGO DA VELHA  ' + 'OX' * 10,'\n')
-		print('JOGADOR 1 (X) \nJOGADOR 2 (O)')
+		print('\n', f'{X}X{tag}{O}O{tag}' * 10 + f' {destaque}  JOGO DA VELHA  {tag} ' + f'{O}O{tag}{X}X{tag}' * 10,'\n')
+		print(f'JOGADOR 1 ({X}X{tag}) \nJOGADOR 2 ({O}O{tag})')
 		print('Use o numpad para marcar')
-		opcao = int(input('\n1) UM JOGADOR (COMPUTADOR) \n2) DOIS JOGADORES \n3) SAIR\n'))
-		if opcao == 1:
+		opcao = str(input('\n1) UM JOGADOR (COMPUTADOR) \n2) DOIS JOGADORES \n3) SAIR\n'))
+		if opcao == '1':
 			sleep(0.8)
 			vsMaquina(tabela)
 	
-		elif opcao == 2:
+		elif opcao == '2':
 			sleep(0.8)
 			vsHumano(tabela)
 	
-		elif opcao == 3:
+		elif opcao == '3':
 			print('Saindo...')
 			sleep(1)
 			break
@@ -39,34 +38,22 @@ def menu():
 def vsMaquina(jogo):
 	while ' ' in jogo[0] or ' ' in jogo[1] or ' ' in jogo[2]:#até os todos espaços vazios serem preenchidos
 		design()
-		print(' ' * 22 + 'VEZ DO JOGADOR 1\n')	
-		while True: 
-			player1 = str(input('\nJogue: ')).strip()[0]
-			if player1 == '1':  x = 2; y = 0
-			elif player1 == '2': x = 2; y = 1
-			elif player1 == '3': x = 2; y = 2 
-			elif player1 == '4': x = 1; y = 0
-			elif player1 == '5': x = 1; y = 1
-			elif player1 == '6': x = 1; y = 2
-			elif player1 == '7': x = 0; y = 0
-			elif player1 == '8': x = 0; y = 1
-			elif player1 == '9': x = 0; y = 2
+		print(' ' * 22 + f'{X}VEZ DO JOGADOR 1{tag}\n')	
 			
-			if jogo[x][y] == ' ' and player1 in '123456789':
-				jogo[x][y] = 'X'
-				break
-		
+		marca(jogo, X, 'X')
+			
 		sleep(1)
 		design()
 		
-		if verifica_X(jogo):
-			print('\nJOGADOR 1 VENCEU!\n')
-			sleep(0.8)
+		if verifica(jogo, 'X'):
+			print(' ' * 22 + f'\n{X}JOGADOR 1 VENCEU!{tag}\n')
+			sleep(1)
 			break
 				
 		if ' ' in jogo[0] or ' ' in jogo[1] or ' ' in jogo[2]:
-			print(' ' * 22 + 'VEZ DO COMPUTADOR')			
+			print(' ' * 22 + f'{O}VEZ DO COMPUTADOR{tag}')			
 		else:  #se o jogo já estiver preenchido, não continuar
+			print(' ' * 22 + f'{destaque}ACABOU O JOGO!{tag}')
 			break
 			
 		computador_linha = randint(0, 2)
@@ -74,60 +61,67 @@ def vsMaquina(jogo):
 		while jogo[computador_linha][computador_coluna] != ' ': ##
 			computador_linha = randint(0, 2)
 			computador_coluna = randint(0, 2)
-		jogo[computador_linha][computador_coluna] = 'O'
+		jogo[computador_linha][computador_coluna] = f'{O}O{tag}'
 		
 		sleep(1)
 		design()	
 					
-		if verifica_O(jogo):
-			print('COMPUTADOR VENCEU!')	
-			sleep(0.8)
+		if verifica(jogo, 'O'):
+			print(' ' * 22 + f'{O}COMPUTADOR VENCEU!{tag}')	
+			sleep(1)
 			break
 	
 
 def vsHumano(jogo):
 	while ' ' in jogo[0] or ' ' in jogo[1] or ' ' in jogo[2]:
 		design()
-		for i in range(2):
-			print(' ' * 22 + f'VEZ DO JOGADOR {i+1}\n')	
-			while True: 
-				player1 = str(input('\nJogue: ')).strip()[0]
-				if player1 == '1':  x = 2; y = 0
-				elif player1 == '2': x = 2; y = 1
-				elif player1 == '3': x = 2; y = 2 
-				elif player1 == '4': x = 1; y = 0
-				elif player1 == '5': x = 1; y = 1
-				elif player1 == '6': x = 1; y = 2
-				elif player1 == '7': x = 0; y = 0
-				elif player1 == '8': x = 0; y = 1
-				elif player1 == '9': x = 0; y = 2
+		print(' ' * 22 + f'{X}VEZ DO JOGADOR 1{tag}\n')	 
+		
+		marca(jogo, X, 'X')		
 			
-				if jogo[x][y] == ' ' and player1 in '123456789':
-					if i == 0:
-						jogo[x][y] = 'X'
-					elif i == 1:
-						jogo[x][y] = 'O'
-					break
+		sleep(1)
+		design()
+					
+		if verifica(jogo, 'X'):
+			print(' ' * 22 + f'\n{X}JOGADOR 1 VENCEU!{tag}\n')
+			sleep(2)
+			break
 				
-			sleep(1)
-			design()
-			
-			if verifica_X(jogo):
-				print(f'\nJOGADOR {i+1} VENCEU!\n')
-				sleep(0.8)
-				break
-			if verifica_O(jogo):
-				print(f'\nJOGADOR {i+1} VENCEU!\n')
-				sleep(0.8)
-				break
-			
+		if ' ' in jogo[0] or ' ' in jogo[1] or ' ' in jogo[2]:
+			print(' ' * 22 + f'{O}VEZ DO JOGADOR 2{tag}')
+					
+		else: #se o jogo já estiver preenchido, não continuar
+			print(' ' * 22 + f'{destaque}ACABOU O JOGO!{tag}')
+			break
 
-def verifica_X(jogo):
-	if jogo[0][0] == jogo[1][0] == jogo[2][0] == 'X' or jogo[0][1] == jogo[1][1] == jogo[2][1] == 'X' or jogo[0][2] == jogo[1][2] == jogo[2][2] == 'X' or jogo[0][0] == jogo[0][1] == jogo[0][2] == 'X' or jogo[1][0] == jogo[1][1] == jogo[1][2] == 'X' or jogo[2][0] == jogo[2][1] == jogo[2][2] == 'X' or jogo[0][0] == jogo[1][1] == jogo[2][2] == 'X' or jogo[2][0] == jogo[1][1] == jogo[0][2] == 'X':
-		return True
-		
+		marca(jogo, O, 'O')
+					
+		sleep(1)
+		design()	
 			
-def verifica_O(jogo):
-	if jogo[0][0] == jogo[1][0] == jogo[2][0] == 'O' or jogo[0][1] == jogo[1][1] == jogo[2][1] == 'O' or jogo[0][2] == jogo[1][2] == jogo[2][2] == 'O' or jogo[0][0] == jogo[0][1] == jogo[0][2] == 'O' or jogo[1][0] == jogo[1][1] == jogo[1][2] == 'O' or jogo[2][0] == jogo[2][1] == jogo[2][2] == 'O' or jogo[0][0] == jogo[1][1] == jogo[2][2] == 'O' or jogo[2][0] == jogo[1][1] == jogo[0][2] == 'O':
+		if verifica(jogo, 'O'):
+			print(' ' * 22, f'\n{O}JOGADOR 2 VENCEU!{tag}\n')
+			sleep(2)
+			break
+	
+			
+def marca(jogo, cor, A):
+	while True: 
+		player = str(input(f'\n{destaque}Jogue:{tag} ')).strip()[0]
+		if player == '1':  x = 2; y = 0
+		elif player == '2': x = 2; y = 1
+		elif player == '3': x = 2; y = 2 
+		elif player == '4': x = 1; y = 0
+		elif player == '5': x = 1; y = 1
+		elif player == '6': x = 1; y = 2
+		elif player == '7': x = 0; y = 0
+		elif player == '8': x = 0; y = 1
+		elif player == '9': x = 0; y = 2
+		if jogo[x][y] == ' ' and player in '123456789':
+			jogo[x][y] = f'{cor}{A}{tag}'
+			break
+			
+			
+def verifica(jogo, A):
+	if jogo[0][0] == jogo[1][0] == jogo[2][0] == f'{X}{A}{tag}' or jogo[0][1] == jogo[1][1] == jogo[2][1] == f'{X}{A}{tag}' or jogo[0][2] == jogo[1][2] == jogo[2][2] == f'{X}{A}{tag}' or jogo[0][0] == jogo[0][1] == jogo[0][2] == f'{X}{A}{tag}' or jogo[1][0] == jogo[1][1] == jogo[1][2] == f'{X}{A}{tag}' or jogo[2][0] == jogo[2][1] == jogo[2][2] == f'{X}{A}{tag}' or jogo[0][0] == jogo[1][1] == jogo[2][2] == f'{X}{A}{tag}' or jogo[2][0] == jogo[1][1] == jogo[0][2] == f'{X}{A}{tag}':
 		return True
-		
