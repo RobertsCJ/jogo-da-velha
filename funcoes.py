@@ -1,9 +1,14 @@
 from time import sleep
 from random import randint
+import os
+
 X = '\033[1;31m'; O = '\033[1;36m'; tag = '\033[m'; destaque = '\033[1;7m'
 
+so = 'clear' if os.name == "posix" else "cls"
+limpar_tela = lambda so: exec(f"os.system('{so}')")
 
 def design(): #tabela do jogo da velha
+	limpar_tela(so)
 	print()
 	print(' ' * 25, '#       #')
 	print(' ' * 25, ' ', tabela[0][0] + '|' + tabela[0][1] + '|' + tabela[0][2]) 
@@ -16,8 +21,8 @@ def menu():
 	global tabela
 	while True:	
 		tabela=[[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
-				
-		print('\n', f'{X}X{tag}{O}O{tag}' * 10 + f' {destaque}  JOGO DA VELHA  {tag} ' + f'{O}O{tag}{X}X{tag}' * 10,'\n')
+		limpar_tela(so)
+		print('\n', f'{X}X{tag}{O}O{tag}' * 10 + f' {destaque}  SHARP  {tag} ' + f'{O}O{tag}{X}X{tag}' * 10,'\n')
 		print(f'JOGADOR 1 ({X}X{tag}) \nJOGADOR 2 ({O}O{tag})')
 		print('Use o numpad para marcar')
 		opcao = str(input('\n1) UM JOGADOR (COMPUTADOR) \n2) DOIS JOGADORES \n3) SAIR\n'))
@@ -30,22 +35,27 @@ def menu():
 			vsHumano(tabela)
 	
 		elif opcao == '3':
-			print('Saindo...')
-			sleep(1)
+			for i in range(6, 10):
+				limpar_tela(so)
+				print('Saindo...'[0:i]);
+				sleep(.33)
+				
 			break
 
 
 def vsMaquina(jogo):
 	while ' ' in jogo[0] or ' ' in jogo[1] or ' ' in jogo[2]:#até os todos espaços vazios serem preenchidos
+		limpar_tela(so)
 		design()
 		print(' ' * 22 + f'{X}VEZ DO JOGADOR 1{tag}\n')	
 			
 		marca(jogo, X, 'X')
 			
 		sleep(1)
+
 		design()
 		
-		if verifica(jogo, 'X'):
+		if verifica(jogo, X, 'X'):
 			print(' ' * 22 + f'\n{X}JOGADOR 1 VENCEU!{tag}\n')
 			sleep(1)
 			break
@@ -66,7 +76,7 @@ def vsMaquina(jogo):
 		sleep(1)
 		design()	
 					
-		if verifica(jogo, 'O'):
+		if verifica(jogo, O, 'O'):
 			print(' ' * 22 + f'{O}COMPUTADOR VENCEU!{tag}')	
 			sleep(1)
 			break
@@ -82,7 +92,7 @@ def vsHumano(jogo):
 		sleep(1)
 		design()
 					
-		if verifica(jogo, 'X'):
+		if verifica(jogo, X, 'X'):
 			print(' ' * 22 + f'\n{X}JOGADOR 1 VENCEU!{tag}\n')
 			sleep(2)
 			break
@@ -99,14 +109,14 @@ def vsHumano(jogo):
 		sleep(1)
 		design()	
 			
-		if verifica(jogo, 'O'):
+		if verifica(jogo, O, 'O'):
 			print(' ' * 22, f'\n{O}JOGADOR 2 VENCEU!{tag}\n')
 			sleep(2)
 			break
 	
 			
 def marca(jogo, cor, A):
-	while True: 
+	while True:
 		player = str(input(f'\n{destaque}Jogue:{tag} ')).strip()[0]
 		if player == '1':  x = 2; y = 0
 		elif player == '2': x = 2; y = 1
@@ -120,8 +130,14 @@ def marca(jogo, cor, A):
 		if jogo[x][y] == ' ' and player in '123456789':
 			jogo[x][y] = f'{cor}{A}{tag}'
 			break
-			
-			
-def verifica(jogo, A):
+		else:
+			design()
+			print(' ' * 22 +  f"{destaque} TENTE NOVAMENTE {tag}")
+			if A == 'X':
+				print(' ' * 22 + f'{X}VEZ DO JOGADOR 1{tag}')
+			elif A == 'O':
+				print(' ' * 22 + f'{O}VEZ DO JOGADOR 2{tag}')
+
+def verifica(jogo, X, A):
 	if jogo[0][0] == jogo[1][0] == jogo[2][0] == f'{X}{A}{tag}' or jogo[0][1] == jogo[1][1] == jogo[2][1] == f'{X}{A}{tag}' or jogo[0][2] == jogo[1][2] == jogo[2][2] == f'{X}{A}{tag}' or jogo[0][0] == jogo[0][1] == jogo[0][2] == f'{X}{A}{tag}' or jogo[1][0] == jogo[1][1] == jogo[1][2] == f'{X}{A}{tag}' or jogo[2][0] == jogo[2][1] == jogo[2][2] == f'{X}{A}{tag}' or jogo[0][0] == jogo[1][1] == jogo[2][2] == f'{X}{A}{tag}' or jogo[2][0] == jogo[1][1] == jogo[0][2] == f'{X}{A}{tag}':
 		return True
