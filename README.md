@@ -1,5 +1,5 @@
-# <h1>jogo da velha</h1>
-<p><i>jogo da velha</i> is the classic tic-tac toe game, now made in python!</p>
+# <h1>Sharp</h1>
+<p><i>Sharp</i> is the classic tic-tac toe game, now made in python!</p>
 <ul>
   <li>single-player mode (against machine)</li>
   <li>2 players mode (co-op)</li>
