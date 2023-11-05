@@ -6,7 +6,7 @@
 </ul>
 
 <p>To play the game, download the files, and start:</p>
-<blockquote>jogo-da-velha.py</blockquote>
+<blockquote>sharp.py/blockquote>
 
 <h2>How to play</h2>
 
